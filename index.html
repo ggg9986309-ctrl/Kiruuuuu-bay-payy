@@ -3,115 +3,46 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="theme-color" content="#090d1b">
 <title>KIRUU PAY</title>
-<style>
-*{box-sizing:border-box;margin:0;padding:0}
-body{
-  font-family:Arial,sans-serif;
-  background:#090d1b;
-  color:#fff;
-  min-height:100vh;
-}
-header{
-  padding:25px 20px;
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-}
-.logo{font-size:25px;font-weight:900;letter-spacing:1px}
-.logo span{color:#8b7cff}
-.profile{
-  width:42px;height:42px;border-radius:50%;
-  background:#252b48;display:grid;place-items:center;
-}
-main{padding:15px 20px;max-width:600px;margin:auto}
-.welcome{color:#aab1ca;font-size:14px}
-h1{font-size:27px;margin:9px 0 24px}
-.balance{
-  background:linear-gradient(135deg,#5144c9,#171d45);
-  border:1px solid #7770df;border-radius:22px;
-  padding:25px;margin-bottom:25px;
-}
-.balance small{color:#ddd8ff}
-.amount{font-size:35px;font-weight:800;margin:12px 0}
-.status{font-size:12px;color:#ffe4a1}
-.section-title{font-size:18px;margin:25px 0 15px}
-.actions{display:grid;grid-template-columns:repeat(2,1fr);gap:13px}
-.action{
-  background:#151c32;border:1px solid #28314e;
-  border-radius:17px;padding:22px 12px;
-  text-align:center;
-}
-.action .symbol{font-size:27px;margin-bottom:10px}
-.action p{font-weight:700}
-.action small{display:block;color:#9ca6c4;margin-top:6px}
-.notice{
-  background:#171d30;border:1px solid #39405c;
-  border-radius:14px;padding:16px;margin-top:25px;
-  color:#bdc5df;font-size:13px;line-height:1.6;
-}
-nav{
-  position:fixed;bottom:0;left:0;right:0;
-  background:#11182a;border-top:1px solid #29314b;
-  display:flex;justify-content:space-around;padding:16px 5px;
-}
-nav span{font-size:12px;color:#aab2ca}
-nav span:first-child{color:#a99cff}
-</style>
+<link rel="manifest" href="manifest.json">
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
+
 <header>
   <div class="logo">KIRUU <span>PAY</span></div>
   <div class="profile">👤</div>
 </header>
 
-<main>
-  <p class="welcome">Welcome to KIRUU PAY</p>
-  <h1>Payments, made simple.</h1>
+<main class="container">
+  <p class="muted">WELCOME TO</p>
+  <h1>KIRUU PAY</h1>
 
-  <section class="balance">
-    <small>PAYMENT ACCOUNT</small>
-    <div class="amount">₹ —</div>
-    <div class="status">Payment account not connected</div>
+  <section class="card">
+    <p class="muted">Merchant account</p>
+    <h2 style="margin:12px 0">₹ —</h2>
+    <p class="muted">No payment account connected</p>
   </section>
 
-  <h2 class="section-title">Payment Services</h2>
+  <h2 style="margin:25px 0 15px">Payment Services</h2>
+
   <div class="actions">
-    <div class="action">
-      <div class="symbol">📲</div>
-      <p>Scan QR</p>
-      <small>Coming soon</small>
-    </div>
-    <div class="action">
-      <div class="symbol">💳</div>
-      <p>Accept Payment</p>
-      <small>Coming soon</small>
-    </div>
-    <div class="action">
-      <div class="symbol">📊</div>
-      <p>Transactions</p>
-      <small>Payment records</small>
-    </div>
-    <div class="action">
-      <div class="symbol">⚙️</div>
-      <p>Settings</p>
-      <small>Account settings</small>
-    </div>
+    <a class="card" href="payment.html">💳<br><br>Accept Payments</a>
+    <a class="card" href="history.html">📊<br><br>Transaction History</a>
   </div>
 
-  <div class="notice">
-    <strong>Secure payment platform</strong><br>
-    KIRUU PAY is under development. No real payments are enabled until the payment provider and merchant account are approved and connected.
-  </div>
+  <section class="card" style="margin-top:20px">
+    <h3>System Status</h3>
+    <p id="server-status" class="muted">Checking connection...</p>
+  </section>
+
+  <p class="muted" style="margin-top:20px;font-size:12px">
+    Real payments are not enabled yet. Provider approval and secure integration are required.
+  </p>
 </main>
 
-<nav>
-  <span>⌂ Home</span>
-  <span>▦ Payments</span>
-  <span>◷ History</span>
-  <span>⚙ Settings</span>
-</nav>
+<script src="app.js"></script>
 </body>
 </html>
