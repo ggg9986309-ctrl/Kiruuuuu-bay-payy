@@ -3,14 +3,20 @@
   "name": "kiruu-pay",
   "version": "1.0.0",
   "private": true,
-  "description": "KIRUU PAY secure payment application",
+  "description": "KIRUU PAY Payment Application",
   "main": "server.js",
   "scripts": {
-    "start": "node server.js"
+    "start": "node server.js",
+    "build": "mkdir -p www && cp *.html *.css *.js manifest.json icon-512.png www/"
   },
   "dependencies": {
     "express": "^5.1.0",
     "razorpay": "^2.9.6",
-    "dotenv": "^16.4.7"
+    "dotenv": "^16.4.7",
+    "@capacitor/core": "^7.4.3"
+  },
+  "devDependencies": {
+    "@capacitor/cli": "^7.4.3",
+    "@capacitor/android": "^7.4.3"
   }
 }
