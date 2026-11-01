@@ -4,16 +4,22 @@ const Razorpay = require("razorpay");
 const crypto = require("crypto");
 require("dotenv").config();
 
+const {
+  initializeDatabase,
+  saveTransaction
+} = require("./db");
+
 const app = express();
-
-app.use(express.json());
-app.use(express.static(__dirname));
-
 const PORT = process.env.PORT || 3000;
 
+app.use(express.json({ limit: "20kb" }));
+app.use(express.static(__dirname));
+
 function getRazorpay() {
-  if (!process.env.RAZORPAY_KEY_ID ||
-      !process.env.RAZORPAY_KEY_SECRET) {
+  if (
+    !process.env.RAZORPAY_KEY_ID ||
+    !process.env.RAZORPAY_KEY_SECRET
+  ) {
     throw new Error("Payment provider is not configured");
   }
 
@@ -23,20 +29,25 @@ function getRazorpay() {
   });
 }
 
+// Server health
 app.get("/api/health", (req, res) => {
   res.json({
     app: "KIRUU PAY",
     server: "online",
-    payments: "not_configured"
+    payments: "not_enabled_for_public_use"
   });
 });
 
-// Create a payment order
+// Create Razorpay order
 app.post("/api/create-order", async (req, res) => {
   try {
     const amount = Number(req.body.amount);
 
-    if (!Number.isInteger(amount) || amount < 100 || amount > 100000) {
+    if (
+      !Number.isInteger(amount) ||
+      amount < 1 ||
+      amount > 1000
+    ) {
       return res.status(400).json({
         error: "Amount must be between ₹1 and ₹1,000"
       });
@@ -50,7 +61,7 @@ app.post("/api/create-order", async (req, res) => {
       receipt: "kiruu_" + crypto.randomUUID()
     });
 
-    res.json({
+    return res.json({
       orderId: order.id,
       amount: order.amount,
       currency: order.currency,
@@ -59,14 +70,15 @@ app.post("/api/create-order", async (req, res) => {
 
   } catch (error) {
     console.error("Order creation failed:", error.message);
-    res.status(503).json({
-      error: "Payment service is not configured or unavailable"
+
+    return res.status(503).json({
+      error: "Payment service is unavailable"
     });
   }
 });
 
-// Verify Razorpay payment signature
-app.post("/api/verify-payment", (req, res) => {
+// Verify payment and save captured transaction
+app.post("/api/verify-payment", async (req, res) => {
   try {
     const {
       razorpay_order_id,
@@ -74,12 +86,14 @@ app.post("/api/verify-payment", (req, res) => {
       razorpay_signature
     } = req.body;
 
-    if (!razorpay_order_id ||
-        !razorpay_payment_id ||
-        !razorpay_signature) {
+    if (
+      typeof razorpay_order_id !== "string" ||
+      typeof razorpay_payment_id !== "string" ||
+      typeof razorpay_signature !== "string"
+    ) {
       return res.status(400).json({
         verified: false,
-        error: "Missing payment details"
+        error: "Invalid payment details"
       });
     }
 
@@ -88,34 +102,117 @@ app.post("/api/verify-payment", (req, res) => {
     if (!secret) {
       return res.status(503).json({
         verified: false,
-        error: "Payment service is not configured"
+        error: "Payment provider is not configured"
       });
     }
 
     const expectedSignature = crypto
       .createHmac("sha256", secret)
       .update(razorpay_order_id + "|" + razorpay_payment_id)
-      .digest("hex");
+      .digest();
 
-    const received = Buffer.from(razorpay_signature, "hex");
-    const expected = Buffer.from(expectedSignature, "hex");
+    let receivedSignature;
 
-    const verified =
-      received.length === expected.length &&
-      crypto.timingSafeEqual(received, expected);
+    try {
+      receivedSignature = Buffer.from(
+        razorpay_signature,
+        "hex"
+      );
+    } catch {
+      return res.status(400).json({
+        verified: false,
+        error: "Invalid signature"
+      });
+    }
 
-    res.status(verified ? 200 : 400).json({
-      verified
+    if (
+      receivedSignature.length !== expectedSignature.length ||
+      !crypto.timingSafeEqual(
+        receivedSignature,
+        expectedSignature
+      )
+    ) {
+      return res.status(400).json({
+        verified: false,
+        error: "Payment signature is invalid"
+      });
+    }
+
+    const razorpay = getRazorpay();
+
+    // Verify actual payment with Razorpay
+    const payment = await razorpay.payments.fetch(
+      razorpay_payment_id
+    );
+
+    if (
+      payment.order_id !== razorpay_order_id ||
+      payment.status !== "captured"
+    ) {
+      return res.status(400).json({
+        verified: false,
+        error: "Payment is not captured or does not match"
+      });
+    }
+
+    const order = await razorpay.orders.fetch(
+      razorpay_order_id
+    );
+
+    if (
+      order.status !== "paid" ||
+      order.amount !== payment.amount ||
+      order.currency !== payment.currency
+    ) {
+      return res.status(400).json({
+        verified: false,
+        error: "Order and payment details do not match"
+      });
+    }
+
+    // Save only after successful provider verification
+    const saved = await saveTransaction({
+      orderId: razorpay_order_id,
+      paymentId: razorpay_payment_id,
+      amount: payment.amount,
+      currency: payment.currency
+    });
+
+    if (!saved) {
+      return res.status(409).json({
+        verified: false,
+        error: "Transaction already recorded"
+      });
+    }
+
+    return res.json({
+      verified: true,
+      message: "Captured payment verified and recorded",
+      transactionId: saved.id
     });
 
   } catch (error) {
-    res.status(400).json({
+    console.error("Payment verification failed:", error.message);
+
+    return res.status(503).json({
       verified: false,
-      error: "Verification failed"
+      error: "Verification or database service unavailable"
     });
   }
 });
 
-app.listen(PORT, () => {
-  console.log("KIRUU PAY server running on port " + PORT);
-});
+// Start server and initialize database
+async function startServer() {
+  try {
+    await initializeDatabase();
+
+    app.listen(PORT, () => {
+      console.log("KIRUU PAY server running on port " + PORT);
+    });
+  } catch (error) {
+    console.error("Database initialization failed:", error.message);
+    process.exit(1);
+  }
+}
+
+startServer();
