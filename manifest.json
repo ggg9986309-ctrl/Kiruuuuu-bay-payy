@@ -1,0 +1,21 @@
+
+{
+  "id": "/",
+  "name": "KIRUU PAY",
+  "short_name": "KIRUU PAY",
+  "description": "KIRUU PAY Merchant Payment Application",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#090d1b",
+  "theme_color": "#090d1b",
+  "icons": [
+    {
+      "src": "/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ]
+}
