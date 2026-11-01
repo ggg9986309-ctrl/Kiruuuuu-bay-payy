@@ -7,7 +7,7 @@
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
-    "build": "mkdir -p www && cp *.html *.css *.js manifest.json icon-512.png www/"
+    "build": "mkdir -p www && cp *.html *.css app.js manifest.json icon-512.png www/"
   },
   "dependencies": {
     "express": "^5.1.0",
