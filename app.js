@@ -2,25 +2,36 @@
 "use strict";
 
 document.addEventListener("DOMContentLoaded", () => {
-  console.log("KIRUU PAY initialized");
-
-  const healthStatus = document.getElementById("server-status");
+  const status = document.getElementById("server-status");
 
   async function checkServer() {
-    if (!healthStatus) return;
+    if (!status) return;
+
+    status.textContent = "Connecting to KIRUU PAY server...";
 
     try {
-      const response = await fetch("/api/health");
-      if (!response.ok) throw new Error("Server unavailable");
+      const response = await fetch("/api/health", {
+        method: "GET",
+        headers: {
+          "Accept": "application/json"
+        }
+      });
 
-      const data = await response.json();
+      if (!response.ok) {
+        throw new Error("Server unavailable");
+      }
 
-      healthStatus.textContent =
-        data.server === "online"
-          ? "Server connected"
-          : "Server unavailable";
-    } catch {
-      healthStatus.textContent = "Server not connected";
+      const result = await response.json();
+
+      if (result.app === "KIRUU PAY" &&
+          result.server === "online") {
+        status.textContent = "Server connected";
+      } else {
+        status.textContent = "Server status unavailable";
+      }
+    } catch (error) {
+      status.textContent =
+        "Backend not connected. Open the hosted app after deployment.";
     }
   }
 
