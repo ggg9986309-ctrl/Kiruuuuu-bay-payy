@@ -1,54 +1,111 @@
 
-:root {
-  --bg: #090d1b;
-  --card: #151c32;
-  --primary: #8174ff;
-  --text: #ffffff;
-  --muted: #aab2ca;
-}
-
 * {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
 }
 
+:root {
+  --bg: #090d1b;
+  --card: #151c32;
+  --border: #293451;
+  --purple: #8877ff;
+  --text: #ffffff;
+  --muted: #aab2ca;
+}
+
 body {
-  font-family: Arial, sans-serif;
   background: var(--bg);
   color: var(--text);
+  font-family: Arial, sans-serif;
+  min-height: 100vh;
 }
 
-button, input {
-  font: inherit;
-}
-
-button {
-  cursor: pointer;
-}
-
-.container {
-  width: min(100% - 32px, 600px);
+header {
+  height: 75px;
+  padding: 0 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  max-width: 650px;
   margin: auto;
 }
 
-.card {
-  background: var(--card);
-  border: 1px solid #29314b;
-  border-radius: 18px;
-  padding: 20px;
+.logo {
+  font-size: 25px;
+  font-weight: 900;
+  letter-spacing: 1px;
 }
 
-.primary-button {
-  background: var(--primary);
+.logo span {
+  color: var(--purple);
+}
+
+.profile {
+  width: 43px;
+  height: 43px;
+  border-radius: 50%;
+  background: var(--card);
+  display: grid;
+  place-items: center;
+}
+
+.container {
+  width: min(100% - 32px, 610px);
+  margin: 25px auto 100px;
+}
+
+h1 {
+  font-size: 30px;
+  margin: 10px 0 25px;
+}
+
+.card {
+  display: block;
+  background: linear-gradient(145deg, #171f3c, #11172a);
+  border: 1px solid var(--border);
+  border-radius: 19px;
+  padding: 22px;
   color: white;
-  border: 0;
-  border-radius: 12px;
-  padding: 14px 20px;
-  font-weight: bold;
-  width: 100%;
+  text-decoration: none;
+}
+
+.card h2 {
+  font-size: 30px;
 }
 
 .muted {
   color: var(--muted);
+  line-height: 1.6;
+}
+
+.actions {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 13px;
+}
+
+.actions .card {
+  min-height: 120px;
+  font-size: 16px;
+  font-weight: bold;
+  transition: .2s;
+}
+
+.actions .card:active {
+  transform: scale(.97);
+}
+
+a {
+  color: var(--purple);
+}
+
+@media (max-width: 380px) {
+  h1 {
+    font-size: 26px;
+  }
+
+  .actions {
+    grid-template-columns: 1fr;
+  }
 }
