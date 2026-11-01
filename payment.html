@@ -3,33 +3,237 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="theme-color" content="#090d1b">
-<title>KIRUU PAY - Payments</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#090b18">
+<title>Payments | KIRUU PAY</title>
 <link rel="stylesheet" href="style.css">
+<style>
+.payment-wrap {
+  width: min(100% - 30px, 520px);
+  margin: auto;
+  padding: 24px 0 35px;
+}
+.back-link {
+  color: #b6a4ff;
+  font-size: 14px;
+}
+.page-title {
+  font-size: 25px;
+  margin: 25px 0 7px;
+}
+.page-subtitle {
+  color: #a5a8bd;
+  font-size: 13px;
+  margin-bottom: 22px;
+}
+.payment-tabs {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 9px;
+  margin-bottom: 20px;
+}
+.payment-tab {
+  padding: 13px 5px;
+  border-radius: 13px;
+  background: #1b1e34;
+  color: #c5c5d8;
+  font-weight: 700;
+  font-size: 12px;
+}
+.payment-tab.active {
+  background: #7655f6;
+  color: white;
+}
+.payment-panel {
+  padding: 22px;
+  background: #15182b;
+  border: 1px solid #292d48;
+  border-radius: 20px;
+}
+.payment-panel h2 {
+  font-size: 19px;
+  margin-bottom: 8px;
+}
+.payment-panel p {
+  color: #a5a8bd;
+  font-size: 12px;
+  line-height: 1.6;
+}
+.payment-field {
+  display: block;
+  margin-top: 20px;
+}
+.payment-field span {
+  display: block;
+  color: #c6c7d8;
+  font-size: 12px;
+  margin-bottom: 9px;
+}
+.payment-field input {
+  width: 100%;
+  padding: 15px;
+  border-radius: 12px;
+  border: 1px solid #343852;
+  outline: none;
+  background: #0d1020;
+  color: white;
+  font-size: 15px;
+}
+.payment-field input:focus {
+  border-color: #9277ff;
+}
+.primary-action {
+  width: 100%;
+  margin-top: 22px;
+  padding: 15px;
+  border-radius: 13px;
+  background: linear-gradient(110deg,#7655f6,#a34de9);
+  color: white;
+  font-size: 14px;
+  font-weight: 800;
+}
+.qr-placeholder {
+  width: 170px;
+  height: 170px;
+  margin: 22px auto;
+  border: 2px dashed #8066df;
+  border-radius: 18px;
+  display: grid;
+  place-items: center;
+  text-align: center;
+  color: #b9aaff;
+  font-size: 13px;
+  padding: 15px;
+}
+.payment-notice {
+  margin-top: 18px;
+  padding: 13px;
+  background: #24203b;
+  border: 1px solid #493c78;
+  border-radius: 12px;
+  color: #d0c5ff;
+  font-size: 11px;
+  line-height: 1.6;
+}
+</style>
 </head>
 <body>
-<header>
-  <div class="logo">KIRUU <span>PAY</span></div>
+
+<header class="topbar">
+  <a href="index.html" class="brand">KIRUU<span>PAY</span></a>
+  <div class="top-actions">
+    <a href="history.html"><button aria-label="History">◷</button></a>
+  </div>
 </header>
 
-<main class="container">
-  <h1>Accept Payments</h1>
-  <section class="card">
-    <h2>Payment Service</h2>
-    <p class="muted">Connect an approved payment provider to accept real customer payments.</p>
-    <br>
-    <p id="payment-status">Payment gateway not connected</p>
+<main class="payment-wrap">
+  <a href="index.html" class="back-link">← Back to Home</a>
+
+  <h1 class="page-title">Payments</h1>
+  <p class="page-subtitle">Manage your payment activities in one place.</p>
+
+  <div class="payment-tabs">
+    <button class="payment-tab active" data-panel="scan">Scan QR</button>
+    <button class="payment-tab" data-panel="send">Send Money</button>
+    <button class="payment-tab" data-panel="receive">Receive</button>
+  </div>
+
+  <section class="payment-panel" id="scan">
+    <h2>Scan & Pay</h2>
+    <p>Scan a merchant QR code to prepare a payment.</p>
+    <div class="qr-placeholder">
+      <div>
+        <div style="font-size:48px">▦</div>
+        QR Scanner
+      </div>
+    </div>
+    <button class="primary-action" type="button" id="scan-button">
+      Open QR Scanner
+    </button>
+    <div class="payment-notice">
+      Camera scanning and real UPI payments are not connected yet.
+    </div>
   </section>
 
-  <section class="card" style="margin-top:16px">
-    <h3>Merchant Payment</h3>
-    <p class="muted">Your verified business bank account will receive eligible settlements directly through the payment provider.</p>
+  <section class="payment-panel" id="send" hidden>
+    <h2>Send Money</h2>
+    <p>Enter a recipient's UPI ID to prepare a payment.</p>
+    <label class="payment-field">
+      <span>Recipient UPI ID</span>
+      <input type="text" id="upi-id" placeholder="example@upi">
+    </label>
+    <label class="payment-field">
+      <span>Amount (₹)</span>
+      <input type="number" id="amount" placeholder="Enter amount" min="1">
+    </label>
+    <button class="primary-action" type="button" id="send-button">
+      Continue
+    </button>
+    <div class="payment-notice">
+      No money will be transferred. Bank and UPI payment integration is pending.
+    </div>
   </section>
 
-  <p style="margin-top:20px">
-    <a href="index.html">← Back to Home</a>
-  </p>
+  <section class="payment-panel" id="receive" hidden>
+    <h2>Receive Money</h2>
+    <p>Your business payment QR and verified receiving account will appear here after provider setup.</p>
+    <div class="qr-placeholder">
+      <div>
+        <div style="font-size:48px">▦</div>
+        Your QR will appear here
+      </div>
+    </div>
+    <button class="primary-action" type="button" disabled style="opacity:.5">
+      QR Not Available
+    </button>
+    <div class="payment-notice">
+      A verified merchant QR has not been generated yet.
+    </div>
+  </section>
 </main>
+
+<nav class="bottom-nav">
+  <a href="index.html">⌂<small>Home</small></a>
+  <a class="active" href="payment.html">▦<small>Pay</small></a>
+  <a href="history.html">◷<small>History</small></a>
+  <a href="payment.html">▣<small>Business</small></a>
+</nav>
+
+<script>
+const tabs = document.querySelectorAll(".payment-tab");
+const panels = document.querySelectorAll(".payment-panel");
+
+tabs.forEach(tab => {
+  tab.addEventListener("click", () => {
+    tabs.forEach(item => item.classList.remove("active"));
+    panels.forEach(panel => panel.hidden = true);
+
+    tab.classList.add("active");
+    document.getElementById(tab.dataset.panel).hidden = false;
+  });
+});
+
+document.getElementById("send-button").addEventListener("click", () => {
+  const upi = document.getElementById("upi-id").value.trim();
+  const amount = Number(document.getElementById("amount").value);
+
+  if (!/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+$/.test(upi)) {
+    alert("Please enter a valid UPI ID.");
+    return;
+  }
+
+  if (!Number.isFinite(amount) || amount <= 0) {
+    alert("Please enter a valid amount.");
+    return;
+  }
+
+  alert("Payment integration is not enabled yet. No money has been sent.");
+});
+
+document.getElementById("scan-button").addEventListener("click", () => {
+  alert("QR camera scanner will be connected in the next development step.");
+});
+</script>
+
 </body>
 </html>
