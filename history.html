@@ -3,35 +3,148 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="theme-color" content="#090d1b">
-<title>KIRUU PAY - History</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#090b18">
+<title>Transaction History | KIRUU PAY</title>
 <link rel="stylesheet" href="style.css">
+<style>
+.history-wrap {
+  width: min(100% - 30px, 520px);
+  margin: auto;
+  padding: 25px 0 35px;
+}
+.back-link {
+  color: #b6a4ff;
+  font-size: 13px;
+}
+.history-title {
+  font-size: 25px;
+  margin-top: 25px;
+}
+.history-subtitle {
+  color: #a5a8bd;
+  font-size: 12px;
+  margin-top: 7px;
+}
+.history-summary {
+  margin-top: 22px;
+  padding: 21px;
+  border-radius: 19px;
+  background: linear-gradient(120deg,#7048e9,#a34de9);
+}
+.history-summary p {
+  font-size: 12px;
+  color: #eee5ff;
+}
+.history-summary h2 {
+  font-size: 29px;
+  margin-top: 10px;
+}
+.filter-row {
+  display: flex;
+  gap: 9px;
+  margin: 24px 0 18px;
+}
+.filter-btn {
+  padding: 10px 16px;
+  background: #1b1e34;
+  color: #bcbdd0;
+  border-radius: 20px;
+  font-size: 12px;
+}
+.filter-btn.active {
+  background: #7655f6;
+  color: white;
+}
+.transaction-empty {
+  padding: 35px 15px;
+  border: 1px solid #292d48;
+  background: #15182b;
+  border-radius: 19px;
+  text-align: center;
+}
+.transaction-empty .empty-icon {
+  font-size: 42px;
+  color: #a995ff;
+  margin-bottom: 13px;
+}
+.transaction-empty h3 {
+  font-size: 16px;
+}
+.transaction-empty p {
+  margin-top: 8px;
+  font-size: 12px;
+  color: #a5a8bd;
+  line-height: 1.6;
+}
+.history-info {
+  margin-top: 18px;
+  padding: 13px;
+  background: #202039;
+  border-radius: 12px;
+  color: #c7baff;
+  font-size: 11px;
+  line-height: 1.6;
+}
+</style>
 </head>
 <body>
-<header>
-  <div class="logo">KIRUU <span>PAY</span></div>
+
+<header class="topbar">
+  <a href="index.html" class="brand">KIRUU<span>PAY</span></a>
+  <div class="top-actions">
+    <button aria-label="Profile">👤</button>
+  </div>
 </header>
 
-<main class="container">
-  <h1>Transaction History</h1>
+<main class="history-wrap">
 
-  <section class="card">
-    <h3>Payment records</h3>
-    <p class="muted" style="margin-top:10px">
-      No verified transactions available yet.
-    </p>
+  <a href="index.html" class="back-link">← Back to Home</a>
+
+  <h1 class="history-title">Transaction History</h1>
+  <p class="history-subtitle">View your verified payment activity.</p>
+
+  <section class="history-summary">
+    <p>VERIFIED TRANSACTIONS</p>
+    <h2>₹ —</h2>
+    <p>Transaction records will appear after payment integration.</p>
   </section>
 
-  <section class="card" style="margin-top:16px">
-    <p class="muted">
-      Verified payment records will appear here after the payment provider, backend database and webhook verification are connected.
-    </p>
+  <div class="filter-row">
+    <button class="filter-btn active" data-filter="all">All</button>
+    <button class="filter-btn" data-filter="sent">Sent</button>
+    <button class="filter-btn" data-filter="received">Received</button>
+  </div>
+
+  <section class="transaction-empty">
+    <div class="empty-icon">◷</div>
+    <h3>No transactions yet</h3>
+    <p>Your verified transactions will appear here once secure payment services are connected.</p>
   </section>
 
-  <p style="margin-top:20px">
-    <a href="index.html">← Back to Home</a>
-  </p>
+  <div class="history-info">
+    🔒 Only verified server-side payment records should be displayed here. No sample or fake transactions are shown.
+  </div>
+
 </main>
+
+<nav class="bottom-nav">
+  <a href="index.html">⌂<small>Home</small></a>
+  <a href="payment.html">▦<small>Pay</small></a>
+  <a class="active" href="history.html">◷<small>History</small></a>
+  <a href="payment.html">▣<small>Business</small></a>
+</nav>
+
+<script>
+document.querySelectorAll(".filter-btn").forEach(button => {
+  button.addEventListener("click", () => {
+    document.querySelectorAll(".filter-btn").forEach(item => {
+      item.classList.remove("active");
+    });
+    button.classList.add("active");
+  });
+});
+</script>
+
 </body>
 </html>
