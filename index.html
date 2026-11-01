@@ -3,45 +3,108 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="theme-color" content="#090d1b">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#ffffff">
 <title>KIRUU PAY</title>
-<link rel="manifest" href="manifest.json">
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-<header>
-  <div class="logo">KIRUU <span>PAY</span></div>
-  <div class="profile">👤</div>
+<header class="topbar">
+  <div class="brand">KIRUU<span>PAY</span></div>
+  <div class="top-actions">
+    <button aria-label="Notifications">♧</button>
+    <button aria-label="Profile">👤</button>
+  </div>
 </header>
 
 <main class="container">
-  <p class="muted">WELCOME TO</p>
-  <h1>KIRUU PAY</h1>
 
-  <section class="card">
-    <p class="muted">Merchant account</p>
-    <h2 style="margin:12px 0">₹ —</h2>
-    <p class="muted">No payment account connected</p>
+  <section class="welcome">
+    <p>Hello, Welcome!</p>
+    <h1>Payments made simple.</h1>
   </section>
 
-  <h2 style="margin:25px 0 15px">Payment Services</h2>
+  <section class="hero-card">
+    <div class="hero-top">
+      <span>YOUR PAYMENT ACCOUNT</span>
+      <span class="live-dot">● NOT CONNECTED</span>
+    </div>
+    <h2>₹ —</h2>
+    <p>Available balance</p>
+    <div class="hero-footer">
+      <span>KIRUU PAY</span>
+      <span>SECURE PAYMENTS</span>
+    </div>
+  </section>
 
-  <div class="actions">
-    <a class="card" href="payment.html">💳<br><br>Accept Payments</a>
-    <a class="card" href="history.html">📊<br><br>Transaction History</a>
+  <section class="quick-section">
+    <h3>Money Transfers</h3>
+    <div class="quick-grid">
+      <a href="payment.html" class="quick-item">
+        <div class="quick-icon purple">▦</div>
+        <span>Scan QR</span>
+      </a>
+      <a href="payment.html" class="quick-item">
+        <div class="quick-icon pink">↗</div>
+        <span>Send Money</span>
+      </a>
+      <a href="payment.html" class="quick-item">
+        <div class="quick-icon orange">▣</div>
+        <span>Receive</span>
+      </a>
+      <a href="history.html" class="quick-item">
+        <div class="quick-icon blue">◷</div>
+        <span>History</span>
+      </a>
+    </div>
+  </section>
+
+  <section class="service-section">
+    <h3>Recharge & Bills</h3>
+    <div class="service-grid">
+      <div class="service-item"><b>📱</b><span>Mobile Recharge</span></div>
+      <div class="service-item"><b>💡</b><span>Electricity</span></div>
+      <div class="service-item"><b>🚗</b><span>FASTag</span></div>
+      <div class="service-item"><b>📺</b><span>DTH</span></div>
+      <div class="service-item"><b>💧</b><span>Water Bill</span></div>
+      <div class="service-item"><b>📄</b><span>Other Bills</span></div>
+    </div>
+  </section>
+
+  <section class="business-card">
+    <div>
+      <h3>KIRUU PAY Business</h3>
+      <p>Manage your merchant payments and business activity.</p>
+      <a href="payment.html">Explore services →</a>
+    </div>
+    <div class="business-icon">▣</div>
+  </section>
+
+  <section class="history-section">
+    <div class="section-heading">
+      <h3>Recent Transactions</h3>
+      <a href="history.html">View all</a>
+    </div>
+    <div class="empty-state">
+      <span>◷</span>
+      <p>No verified transactions yet</p>
+      <small>Your real payment records will appear here.</small>
+    </div>
+  </section>
+
+  <div class="security-note">
+    🔒 KIRUU PAY is under development. Real payments are not yet enabled.
   </div>
 
-  <section class="card" style="margin-top:20px">
-    <h3>System Status</h3>
-    <p id="server-status" class="muted">Checking connection...</p>
-  </section>
-
-  <p class="muted" style="margin-top:20px;font-size:12px">
-    Real payments are not enabled yet. Provider approval and secure integration are required.
-  </p>
 </main>
+
+<nav class="bottom-nav">
+  <a class="active" href="index.html">⌂<small>Home</small></a>
+  <a href="payment.html">▦<small>Pay</small></a>
+  <a href="history.html">◷<small>History</small></a>
+  <a href="payment.html">▣<small>Business</small></a>
+</nav>
 
 <script src="app.js"></script>
 </body>
