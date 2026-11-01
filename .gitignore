@@ -1,0 +1,25 @@
+
+# Secret credentials
+.env
+.env.*
+!.env.example
+
+# Dependencies
+node_modules/
+
+# Generated website files
+www/
+
+# Android build files
+android/.gradle/
+android/build/
+android/app/build/
+*.apk
+*.aab
+
+# Logs
+npm-debug.log*
+*.log
+
+# Operating system files
+.DS_Store
